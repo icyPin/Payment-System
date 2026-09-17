@@ -1,16 +1,19 @@
 package service;
 
-import dto.TransactionRequest;
-import dto.TransactionResponse;
-import model.TransactionRecord;
-import model.TransactionType;
-import model.Wallet;
+import com.example.Payment.dto.TransactionRequest;
+import com.example.Payment.dto.TransactionResponse;
+import jakarta.transaction.Transactional;
+import com.example.Payment.model.TransactionRecord;
+import com.example.Payment.model.TransactionType;
+import com.example.Payment.model.Wallet;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import repo.TransactionRecordRepository;
 import repo.WalletRepository;
 
+@Service
 public class TransactionService {
     private final WalletRepository walletRepository;
     private final TransactionRecordRepository transactionRepository;
@@ -20,6 +23,7 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
+    @Transactional
     public TransactionResponse processTransaction(TransactionRequest request) {
         if (transactionRepository.existsById(request.transactionId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate transaction.");

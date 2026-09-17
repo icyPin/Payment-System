@@ -1,7 +1,7 @@
 package repo;
 
 import jakarta.persistence.LockModeType;
-import model.Wallet;
+import com.example.Payment.model.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;

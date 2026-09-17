@@ -1,6 +1,6 @@
 package repo;
 
-import model.TransactionRecord;
+import com.example.Payment.model.TransactionRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
