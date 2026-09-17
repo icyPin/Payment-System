@@ -1,0 +1,13 @@
+# Decision Log
+
+### 1. How did you handle the concurrency race condition?
+To prevent negative balances during concurrent debits, I implemented Database-Level Pessimistic Locking using Spring Data JPA's `@Lock(LockModeType.PESSIMISTIC_WRITE)` on the `Wallet` entity[cite: 1].
+
+When multiple requests attempt to modify the same wallet simultaneously, the database translates this to a `SELECT ... FOR UPDATE` query. This acquires an exclusive row-level lock on that specific user's wallet in the H2 database. The first thread acquires the lock, while subsequent concurrent threads are queued dynamically by the database engine. This ensures that the balance verification and deduction happen serially and atomically, preventing double-spend anomalies without the need for complex application-level retry logic[cite: 1].
+
+### 2. Where did your AI assistant give you an incorrect or sub-optimal suggestion?
+My AI assistant provided a few sub-optimal suggestions during the planning and build phases that I had to override to meet the strict project constraints[cite: 1]:
+
+1. **Distributed Locking vs. Zero-Config Constraints:** Initially, standard microservice patterns suggested using a Redis Distributed Lock (like Redisson) to handle the concurrency. I realized this was incorrect for this specific assignment, as introducing a Redis dependency would violate the strict "Zero-Config Integration Tests" requirement, which mandated using only an in-memory database[cite: 1]. I corrected this by using native database locks in H2.
+2. **Over-engineered Exceptions:** The AI initially generated a highly verbose exception-handling architecture, suggesting a dedicated `exception` package with custom classes (e.g., `IdempotentConflictException`) and an `@RestControllerAdvice` global handler. While i understand its importance in production i found this overly complex for an assignment aslo i currently have midsems going I rejected this for a single-endpoint service and refactored the code to use Spring's built-in `ResponseStatusException`, which efficiently handles HTTP status codes (like 409 Conflict for idempotency collisions) directly in the service layer with a fraction of the boilerplate.
+3. **Verbose Concurrency Testing:** To prove the database locks worked under pressure, the AI initially generated integration tests using manual thread management with `CountDownLatch` and `ExecutorService`. I found this unnecessarily verbose and refactored the test suite to use Java's `IntStream.parallel()`, which leverages the common ForkJoinPool to achieve the exact same simultaneous execution with significantly cleaner, modern syntax.
