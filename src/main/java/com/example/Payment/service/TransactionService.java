@@ -1,4 +1,4 @@
-package service;
+package com.example.Payment.service;
 
 import com.example.Payment.dto.TransactionRequest;
 import com.example.Payment.dto.TransactionResponse;
@@ -10,10 +10,13 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-import repo.TransactionRecordRepository;
-import repo.WalletRepository;
+import com.example.Payment.repo.TransactionRecordRepository;
+import com.example.Payment.repo.WalletRepository;
+
+import java.math.BigDecimal;
 
 @Service
+@Transactional
 public class TransactionService {
     private final WalletRepository walletRepository;
     private final TransactionRecordRepository transactionRepository;
@@ -25,6 +28,11 @@ public class TransactionService {
 
     @Transactional
     public TransactionResponse processTransaction(TransactionRequest request) {
+
+        if (request.amount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Amount must be greater than zero.");
+        }
+
         if (transactionRepository.existsById(request.transactionId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate transaction.");
         }
@@ -43,7 +51,10 @@ public class TransactionService {
 
         try {
             transactionRepository.saveAndFlush(new TransactionRecord(
-                    request.transactionId(), request.userId(), request.amount(), request.type()
+                    request.transactionId(),
+                    request.userId(),
+                    request.amount(),
+                    request.type()
             ));
             walletRepository.save(wallet);
         } catch (DataIntegrityViolationException e) {

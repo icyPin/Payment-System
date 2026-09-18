@@ -1,13 +1,13 @@
-package controller;
+package com.example.Payment.controller;
 
-import dto.TransactionRequest;
-import dto.TransactionResponse;
+import com.example.Payment.dto.TransactionRequest;
+import com.example.Payment.dto.TransactionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import service.TransactionService;
+import com.example.Payment.service.TransactionService;
 
 
 @RestController

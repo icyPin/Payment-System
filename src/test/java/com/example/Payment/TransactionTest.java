@@ -1,25 +1,20 @@
 package com.example.Payment;
 
-import dto.TransactionRequest;
-import model.TransactionType;
-import model.Wallet;
+import com.example.Payment.dto.TransactionRequest;
+import com.example.Payment.model.TransactionType;
+import com.example.Payment.model.Wallet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
-import repo.TransactionRecordRepository;
-import repo.WalletRepository;
-import service.TransactionService;
+import com.example.Payment.repo.TransactionRecordRepository;
+import com.example.Payment.repo.WalletRepository;
+import com.example.Payment.service.TransactionService;
 
 import java.math.BigDecimal;
-import java.util.Random;
 import java.util.UUID;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 

@@ -1,9 +1,7 @@
-package model;
+package com.example.Payment.model;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -19,16 +17,16 @@ public class TransactionRecord  {
     private UUID transactionId;
 
     @Column(nullable = false, precision = 18 , scale = 4)
-    private BigDecimal ammount;
+    private BigDecimal amount;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionType tranType;
 
-    public TransactionRecord(UUID userId, UUID transactionId, BigDecimal ammount, TransactionType tranType) {
+    public TransactionRecord(UUID transactionId, UUID userId, BigDecimal amount, TransactionType type) {
         this.userId = userId;
         this.transactionId = transactionId;
-        this.ammount = ammount;
+        this.amount = amount;
         this.tranType = tranType;
     }
 
@@ -51,11 +49,11 @@ public class TransactionRecord  {
     }
 
     public BigDecimal getAmmount() {
-        return ammount;
+        return amount;
     }
 
     public void setAmmount(BigDecimal ammount) {
-        this.ammount = ammount;
+        this.amount = ammount;
     }
 
     public TransactionType getTranType() {

@@ -1,4 +1,4 @@
-package repo;
+package com.example.Payment.repo;
 
 import jakarta.persistence.LockModeType;
 import com.example.Payment.model.Wallet;

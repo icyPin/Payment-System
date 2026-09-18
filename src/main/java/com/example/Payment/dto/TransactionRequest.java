@@ -1,6 +1,6 @@
-package dto;
+package com.example.Payment.dto;
 
-import model.TransactionType;
+import com.example.Payment.model.TransactionType;
 
 import java.math.BigDecimal;
 import java.util.UUID;
