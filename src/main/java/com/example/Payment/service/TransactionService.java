@@ -2,7 +2,7 @@ package com.example.Payment.service;
 
 import com.example.Payment.dto.TransactionRequest;
 import com.example.Payment.dto.TransactionResponse;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import com.example.Payment.model.TransactionRecord;
 import com.example.Payment.model.TransactionType;
 import com.example.Payment.model.Wallet;
@@ -32,13 +32,12 @@ public class TransactionService {
         if (request.amount().compareTo(BigDecimal.ZERO) <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Amount must be greater than zero.");
         }
+        Wallet wallet = walletRepository.findByIdWithLock(request.userId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
 
         if (transactionRepository.existsById(request.transactionId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Duplicate transaction.");
         }
-
-        Wallet wallet = walletRepository.findByIdWithLock(request.userId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
 
         if (request.type() == TransactionType.DEBIT) {
             if (wallet.getBalance().compareTo(request.amount()) < 0) {

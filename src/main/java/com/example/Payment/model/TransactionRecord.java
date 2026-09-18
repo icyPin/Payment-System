@@ -14,6 +14,7 @@ public class TransactionRecord  {
     private UUID userId;
 
     @Id
+    @Column(name = "transaction_id" , updatable = false , nullable = false , unique = true)
     private UUID transactionId;
 
     @Column(nullable = false, precision = 18 , scale = 4)
@@ -27,7 +28,7 @@ public class TransactionRecord  {
         this.userId = userId;
         this.transactionId = transactionId;
         this.amount = amount;
-        this.tranType = tranType;
+        this.tranType = type;
     }
 
     public TransactionRecord(){}
